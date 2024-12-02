@@ -1,9 +1,9 @@
-package day2
+package day02
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class Day2KtTest {
+class Day02KtTest {
 
     @Test
     fun checkSequence() {

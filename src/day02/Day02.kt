@@ -1,14 +1,10 @@
-package day2
+package day02
 
-import java.io.File
-import java.io.InputStream
+import readLines
 
 fun main(args: Array<String>) {
-    val input: InputStream = File("./src/Day2/input.txt").inputStream()
-    val lines = mutableListOf<String>()
+    val lines = readLines("./src/day02/input.txt")
     var safeSequences = 0
-
-    input.bufferedReader().forEachLine { lines.add(it) }
     println("Lines scanned: ${lines.size}")
     lines.forEach { line ->
         run {
