@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
 }
 
 fun getAllMultiplicationCommands(lines: List<String>): List<String> {
-    val regex = Regex("""mul\(-?\d+,-?\d+\)""")
+    val regex = Regex("""mul\(-?\d+,-?\d+\)|do\(\)|don't\(\)""")
     val commands = mutableListOf<String>()
     lines.forEach { line ->
         run {
@@ -28,9 +28,15 @@ fun getMultiplicationForCommand(command: String): Int {
 
 fun multiply(commands: List<String>): Int {
     var res = 0
+    var isRunning = true
     commands.forEach { command ->
         run {
-            res += getMultiplicationForCommand(command)
+            if (command.startsWith("mul") && isRunning)
+                res += getMultiplicationForCommand(command)
+            else if (command.startsWith("don't"))
+                isRunning = false
+            else if (command.startsWith("do"))
+                isRunning = true
         }
     }
     return res
