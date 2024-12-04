@@ -155,24 +155,18 @@ fun calculateMAS(matrix: List<String>): Int {
     return res
 }
 
-fun checkSquare(square: List<String>): Boolean {
+fun checkPattern(square: List<String>, firstC: Char, secondC: Char, thirdC: Char, fourthChar: Char): Boolean {
     val (first, second, third) = square
 
-    val forward = first[0] == 'M' && third[0] == 'M' &&
+    return first[0] == firstC && third[0] == secondC &&
             second[1] == 'A' &&
-            first[2] == 'S' && third[2] == 'S'
+            first[2] == thirdC && third[2] == fourthChar
+}
 
-    val backward = first[0] == 'S' && third[0] == 'S' &&
-            second[1] == 'A' &&
-            first[2] == 'M' && third[2] == 'M'
+fun checkSquare(square: List<String>): Boolean {
 
-    val top = first[0] == 'M' && third[0] == 'S' &&
-            second[1] == 'A' &&
-            first[2] == 'M' && third[2] == 'S'
-
-    val down = first[0] == 'S' && third[0] == 'M' &&
-            second[1] == 'A' &&
-            first[2] == 'S' && third[2] == 'M'
-
-    return forward || backward || top || down
+    return checkPattern(square, 'M', 'M', 'S', 'S') ||
+            checkPattern(square, 'S', 'S', 'M', 'M') ||
+            checkPattern(square, 'M', 'S', 'M', 'S') ||
+            checkPattern(square, 'S', 'M', 'S', 'M')
 }
