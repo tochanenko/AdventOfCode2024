@@ -12,13 +12,13 @@ fun main(args: Array<String>) {
 // XMAS
 
 fun calculateXMAS(matrix: List<String>): Int = calculateTopToBottom(matrix) +
-            calculateBottomToTop(matrix) +
-            calculateLeftToRight(matrix) +
-            calculateRightToLeft(matrix) +
-            calculateTopLeftToBottomRight(matrix) +
-            calculateTopRightToBottomLeft(matrix) +
-            calculateBottomLeftToTopRight(matrix) +
-            calculateBottomRightToTopLeft(matrix)
+        calculateBottomToTop(matrix) +
+        calculateLeftToRight(matrix) +
+        calculateRightToLeft(matrix) +
+        calculateTopLeftToBottomRight(matrix) +
+        calculateTopRightToBottomLeft(matrix) +
+        calculateBottomLeftToTopRight(matrix) +
+        calculateBottomRightToTopLeft(matrix)
 
 
 fun calculateLine(line: String): Int = Regex("""XMAS""").findAll(line).count()
@@ -144,7 +144,7 @@ fun calculateMAS(matrix: List<String>): Int {
             println(square[1])
             println(square[2])
 
-            if (checkSquare(square)) {
+            if (square[1][1] == 'A' && checkSquare(square)) {
                 res++
                 println("OK")
             }
@@ -155,18 +155,15 @@ fun calculateMAS(matrix: List<String>): Int {
     return res
 }
 
-fun checkPattern(square: List<String>, firstC: Char, secondC: Char, thirdC: Char, fourthChar: Char): Boolean {
+fun checkPattern(square: List<String>, firstC: Char, secondC: Char, thirdC: Char, fourthC: Char): Boolean {
     val (first, second, third) = square
 
     return first[0] == firstC && third[0] == secondC &&
             second[1] == 'A' &&
-            first[2] == thirdC && third[2] == fourthChar
+            first[2] == thirdC && third[2] == fourthC
 }
 
-fun checkSquare(square: List<String>): Boolean {
-
-    return checkPattern(square, 'M', 'M', 'S', 'S') ||
-            checkPattern(square, 'S', 'S', 'M', 'M') ||
-            checkPattern(square, 'M', 'S', 'M', 'S') ||
-            checkPattern(square, 'S', 'M', 'S', 'M')
-}
+fun checkSquare(square: List<String>): Boolean = checkPattern(square, 'M', 'M', 'S', 'S') ||
+        checkPattern(square, 'S', 'S', 'M', 'M') ||
+        checkPattern(square, 'M', 'S', 'M', 'S') ||
+        checkPattern(square, 'S', 'M', 'S', 'M')
