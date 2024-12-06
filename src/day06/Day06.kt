@@ -39,7 +39,7 @@ fun buildMatrix(lines: List<String>): Pair<Array<Array<Cell>>, Pair<Int, Int>> {
 //}
 
 // Recursion just for funzies
-fun buildVisitedMatrix(matrix: Array<Array<Cell>>, position: Pair<Int, Int>, direction: Direction): Array<Array<Cell>> {
+fun buildVisitedMatrixRecursion(matrix: Array<Array<Cell>>, position: Pair<Int, Int>, direction: Direction): Array<Array<Cell>> {
     val visitedMatrix = Array(matrix.size) { row -> matrix[row].copyOf() }
     val nextCell = checkNextCell(matrix, position, direction)
     visitedMatrix[position.first][position.second] = Cell.VISITED
@@ -51,6 +51,32 @@ fun buildVisitedMatrix(matrix: Array<Array<Cell>>, position: Pair<Int, Int>, dir
         Cell.EMPTY, Cell.VISITED -> buildVisitedMatrix(visitedMatrix, nextPosition(position, direction), direction)
         Cell.OBSTACLE -> buildVisitedMatrix(visitedMatrix, position, nextDirection(direction))
     }
+}
+
+fun buildVisitedMatrix(matrix: Array<Array<Cell>>, position: Pair<Int, Int>, direction: Direction): Array<Array<Cell>> {
+    val visitedMatrix = Array(matrix.size) { row -> matrix[row].copyOf() }
+    var currentPosition = Pair(position.first, position.second)
+    var currentDirection = direction
+    var isOutside = false
+
+    while (!isOutside) {
+        visitedMatrix[currentPosition.first][currentPosition.second] = Cell.VISITED
+        printMatrix(visitedMatrix)
+        when (checkNextCell(visitedMatrix, currentPosition, currentDirection)) {
+            Cell.OUTSIDE -> {
+                isOutside = true
+            }
+            Cell.EMPTY, Cell.VISITED -> {
+                currentPosition = nextPosition(currentPosition, currentDirection)
+            }
+            Cell.OBSTACLE -> {
+                currentDirection = nextDirection(currentDirection)
+                currentPosition = nextPosition(currentPosition, currentDirection)
+            }
+        }
+    }
+
+    return visitedMatrix
 }
 
 fun checkNextCell(matrix: Array<Array<Cell>>, position: Pair<Int, Int>, direction: Direction): Cell = when (direction) {
