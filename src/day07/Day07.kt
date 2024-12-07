@@ -23,21 +23,17 @@ fun main(args: Array<String>) {
 
 // LOL it worked
 fun outputRandom(equations: List<Equation>) {
-    val calculations = 2
+    val calculations = 5
 
-    for (i in 0..calculations) {
+    for (i in 1..calculations) {
         for (j in equations.indices) {
             if (!equations[j].isCorrect && checkEquationRandom(equations[j])) {
-                print("($j) ")
+                if (DEBUG) print("($j) ")
                 equations[j].isCorrect = true
             }
         }
-        println()
-        println("[ ${equations.count { it.isCorrect }} / ${equations.size} ]")
-        println()
-        println()
+        println("\n[ ${equations.count { it.isCorrect }} / ${equations.size} ]\n\n")
     }
-
     println("Final sum: ${equations.filter { it.isCorrect }.sumOf { it.result }}")
 }
 
