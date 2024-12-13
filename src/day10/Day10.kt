@@ -17,8 +17,53 @@ fun createMatrix(lines: List<String>): Array<Array<Int>> {
 }
 
 fun dfs(matrix: Array<Array<Int>>): Int {
+    val zeroVertices = ArrayDeque<Pair<Int, Int>>()
+    var secondRes = 0
+
+    matrix.forEachIndexed { i, row ->
+        row.forEachIndexed { j, cell ->
+            if (cell == 0) zeroVertices.add(Pair(i, j))
+        }
+    }
+
+    zeroVertices.forEach { start ->
+        val visitedPaths = mutableSetOf<List<Pair<Int, Int>>>()
+        val stack = ArrayDeque<List<Pair<Int, Int>>>()
+        stack.add(listOf(start))
+
+        var currentPathScore = 0
+
+        while (stack.isNotEmpty()) {
+            val path = stack.removeLast()
+            val cell = path.last()
+            val cellHeight = matrix[cell.first][cell.second]
+
+            if (cellHeight == 9) {
+                    currentPathScore++
+                if (path !in visitedPaths) {
+                    visitedPaths.add(path)
+                }
+                continue
+            }
+
+            val adjacentCells = getAdjacent(Triple(cell.first, cell.second, cellHeight), matrix)
+            for (adj in adjacentCells) {
+                if (Pair(adj.first, adj.second) !in path) {
+                    stack.add(path + Pair(adj.first, adj.second))
+                }
+            }
+        }
+
+        val currentPathRating = visitedPaths.size
+        secondRes += currentPathRating
+    }
+
+    return secondRes
+}
+
+fun bfs(matrix: Array<Array<Int>>): Int {
     val zeroVertices = ArrayDeque<MutableList<Triple<Int, Int, Int>>>()
-    var res = 0
+    var firstRes = 0
 
     matrix.forEachIndexed { i, row ->
         row.forEachIndexed { j, cell -> if (cell == 0) zeroVertices.add(mutableListOf(Triple(i, j, matrix[i][j]))) }
@@ -28,9 +73,11 @@ fun dfs(matrix: Array<Array<Int>>): Int {
         run {
             val visitedVertices = mutableSetOf(vertices[0])
             var currentPathScore = 0
+            var currentPathRating = 1
 
             while (vertices.isNotEmpty()) {
                 val cell = vertices.removeFirst()
+                val path = vertices.removeLast()
 
                 if (cell.third == 9) {
                     currentPathScore++
@@ -38,19 +85,22 @@ fun dfs(matrix: Array<Array<Int>>): Int {
                 }
 
                 val adjacentCells = getAdjacent(cell, matrix)
+                val verticesToAdd = mutableListOf<Triple<Int, Int, Int>>()
                 adjacentCells.forEach {
                     if (it !in visitedVertices) {
-                        vertices.add(it)
-                        visitedVertices.add(it)
+                        verticesToAdd.add(it)
                     }
                 }
+                vertices.addAll(verticesToAdd)
+                visitedVertices.addAll(verticesToAdd)
+                if (verticesToAdd.size > 1) currentPathRating += verticesToAdd.size - 1
             }
 
-            res += currentPathScore
+            firstRes += currentPathScore
         }
     }
 
-    return res
+    return firstRes
 }
 
 fun getAdjacent(cell: Triple<Int, Int, Int>, matrix: Array<Array<Int>>): List<Triple<Int, Int, Int>> {
