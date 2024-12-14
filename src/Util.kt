@@ -8,3 +8,8 @@ fun readLines(filename: String): List<String> {
 
     return lines
 }
+
+data class Coords(
+    var x: Int,
+    var y: Int
+)
